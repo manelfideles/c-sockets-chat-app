@@ -1,6 +1,15 @@
-Apr 16 18:13:06.241 HYPERVISOR: Release 0.2.21-amd64/Linux (tag 2019071212)
-Apr 16 18:13:06.241 HYPERVISOR: Started on IP = localhost, TCP port = 51703.
-Apr 16 18:13:06.249 HYPERVISOR: exec_cmd: hypervisor version 
-Apr 16 18:13:06.250 HYPERVISOR: exec_cmd: hypervisor working_dir /home/user/Desktop/SharedFolder/IRC/irc2/projeto/meta 1/meta1/project-files/dynamips 
-Apr 16 18:13:06.251 GENERAL: working_dir=/home/user/Desktop/SharedFolder/IRC/irc2/projeto/meta 1/meta1/project-files/dynamips
-Apr 16 18:13:06.251 HYPERVISOR: exec_cmd: ethsw create SW1 
+Apr 16 19:38:38.211 HYPERVISOR: Release 0.2.21-amd64/Linux (tag 2019071212)
+Apr 16 19:38:38.212 HYPERVISOR: Started on IP = localhost, TCP port = 37175.
+Apr 16 19:38:38.221 HYPERVISOR: exec_cmd: hypervisor version 
+Apr 16 19:38:38.221 HYPERVISOR: exec_cmd: hypervisor working_dir /home/user/Desktop/SharedFolder/IRC/irc2/projeto/meta 1/meta1/project-files/dynamips 
+Apr 16 19:38:38.222 GENERAL: working_dir=/home/user/Desktop/SharedFolder/IRC/irc2/projeto/meta 1/meta1/project-files/dynamips
+Apr 16 19:38:38.222 HYPERVISOR: exec_cmd: ethsw create SW1 
+Apr 16 19:38:39.574 HYPERVISOR: exec_cmd: nio create_udp udp-ff70b374-e225-4e09-bd73-68e4c1ff2b8e 10001 127.0.0.1 10000 
+Apr 16 19:38:39.575 HYPERVISOR: exec_cmd: ethsw add_nio SW1 udp-ff70b374-e225-4e09-bd73-68e4c1ff2b8e 
+Apr 16 19:38:39.583 HYPERVISOR: exec_cmd: ethsw set_access_port SW1 udp-ff70b374-e225-4e09-bd73-68e4c1ff2b8e 1 
+Apr 16 19:38:39.961 HYPERVISOR: exec_cmd: nio create_udp udp-217c633e-cd4d-43c4-a0c1-6fbdeab918bd 10008 127.0.0.1 10009 
+Apr 16 19:38:39.965 HYPERVISOR: exec_cmd: ethsw add_nio SW1 udp-217c633e-cd4d-43c4-a0c1-6fbdeab918bd 
+Apr 16 19:38:39.984 HYPERVISOR: exec_cmd: ethsw set_access_port SW1 udp-217c633e-cd4d-43c4-a0c1-6fbdeab918bd 1 
+Apr 16 19:38:40.706 HYPERVISOR: exec_cmd: nio create_udp udp-86065e67-c707-4bd8-bf08-80fc6f1f2a1a 10029 127.0.0.1 10028 
+Apr 16 19:38:40.708 HYPERVISOR: exec_cmd: ethsw add_nio SW1 udp-86065e67-c707-4bd8-bf08-80fc6f1f2a1a 
+Apr 16 19:38:40.710 HYPERVISOR: exec_cmd: ethsw set_access_port SW1 udp-86065e67-c707-4bd8-bf08-80fc6f1f2a1a 1 

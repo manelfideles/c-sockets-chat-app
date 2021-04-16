@@ -1,20 +1,26 @@
-Apr 16 18:13:06.082 HYPERVISOR: Release 0.2.21-amd64/Linux (tag 2019071212)
-Apr 16 18:13:06.082 HYPERVISOR: Started on IP = localhost, TCP port = 50801.
-Apr 16 18:13:06.089 HYPERVISOR: exec_cmd: hypervisor version 
-Apr 16 18:13:06.090 HYPERVISOR: exec_cmd: hypervisor working_dir /home/user/Desktop/SharedFolder/IRC/irc2/projeto/meta 1/meta1/project-files/dynamips 
-Apr 16 18:13:06.090 GENERAL: working_dir=/home/user/Desktop/SharedFolder/IRC/irc2/projeto/meta 1/meta1/project-files/dynamips
-Apr 16 18:13:06.091 HYPERVISOR: exec_cmd: hypervisor working_dir /home/user/Desktop/SharedFolder/IRC/irc2/projeto/meta 1/meta1/project-files/dynamips/16cff736-3f0c-4344-847c-c3d272ee9034 
-Apr 16 18:13:06.091 GENERAL: working_dir=/home/user/Desktop/SharedFolder/IRC/irc2/projeto/meta 1/meta1/project-files/dynamips/16cff736-3f0c-4344-847c-c3d272ee9034
-Apr 16 18:13:06.092 HYPERVISOR: exec_cmd: vm create R2 2 c2600 
-Apr 16 18:13:06.094 VM: VM R2 created.
-Apr 16 18:13:06.095 HYPERVISOR: exec_cmd: vm set_con_tcp_port R2 5001 
-Apr 16 18:13:06.096 HYPERVISOR: exec_cmd: c2600 get_mac_addr R2 
-Apr 16 18:13:06.098 HYPERVISOR: exec_cmd: vm set_ios R2 /home/user/GNS3/images/IOS/c2600-is-mz.123-17a.bin 
-Apr 16 18:13:06.099 HYPERVISOR: exec_cmd: c2600 set_mac_addr R2 c802.0877.0000 
-Apr 16 18:13:06.100 HYPERVISOR: exec_cmd: vm set_nvram R2 200 
-Apr 16 18:13:06.100 HYPERVISOR: exec_cmd: vm set_ram R2 80 
-Apr 16 18:13:06.101 HYPERVISOR: exec_cmd: vm get_status R2 
-Apr 16 18:13:06.102 HYPERVISOR: exec_cmd: vm slot_add_binding R2 1 0 NM-1FE-TX 
-Apr 16 18:13:06.102 HYPERVISOR: exec_cmd: vm set_sparse_mem R2 1 
-Apr 16 18:13:06.103 HYPERVISOR: exec_cmd: vm get_status R2 
-Apr 16 18:13:06.104 HYPERVISOR: exec_cmd: vm slot_add_binding R2 0 16 WIC-1T 
+Apr 16 19:38:38.064 HYPERVISOR: Release 0.2.21-amd64/Linux (tag 2019071212)
+Apr 16 19:38:38.066 HYPERVISOR: Started on IP = localhost, TCP port = 34645.
+Apr 16 19:38:38.066 HYPERVISOR: exec_cmd: hypervisor version 
+Apr 16 19:38:38.067 HYPERVISOR: exec_cmd: hypervisor working_dir /home/user/Desktop/SharedFolder/IRC/irc2/projeto/meta 1/meta1/project-files/dynamips 
+Apr 16 19:38:38.067 GENERAL: working_dir=/home/user/Desktop/SharedFolder/IRC/irc2/projeto/meta 1/meta1/project-files/dynamips
+Apr 16 19:38:38.068 HYPERVISOR: exec_cmd: hypervisor working_dir /home/user/Desktop/SharedFolder/IRC/irc2/projeto/meta 1/meta1/project-files/dynamips/16cff736-3f0c-4344-847c-c3d272ee9034 
+Apr 16 19:38:38.069 GENERAL: working_dir=/home/user/Desktop/SharedFolder/IRC/irc2/projeto/meta 1/meta1/project-files/dynamips/16cff736-3f0c-4344-847c-c3d272ee9034
+Apr 16 19:38:38.070 HYPERVISOR: exec_cmd: vm create R2 2 c2600 
+Apr 16 19:38:38.072 VM: VM R2 created.
+Apr 16 19:38:38.073 HYPERVISOR: exec_cmd: vm set_con_tcp_port R2 5001 
+Apr 16 19:38:38.074 HYPERVISOR: exec_cmd: c2600 get_mac_addr R2 
+Apr 16 19:38:38.076 HYPERVISOR: exec_cmd: vm set_ios R2 /home/user/GNS3/images/IOS/c2600-is-mz.123-17a.bin 
+Apr 16 19:38:38.077 HYPERVISOR: exec_cmd: c2600 set_mac_addr R2 c802.0877.0000 
+Apr 16 19:38:38.078 HYPERVISOR: exec_cmd: vm set_nvram R2 200 
+Apr 16 19:38:38.080 HYPERVISOR: exec_cmd: vm set_ram R2 80 
+Apr 16 19:38:38.081 HYPERVISOR: exec_cmd: vm get_status R2 
+Apr 16 19:38:38.081 HYPERVISOR: exec_cmd: vm slot_add_binding R2 1 0 NM-1FE-TX 
+Apr 16 19:38:38.082 HYPERVISOR: exec_cmd: vm set_sparse_mem R2 1 
+Apr 16 19:38:38.083 HYPERVISOR: exec_cmd: vm get_status R2 
+Apr 16 19:38:38.084 HYPERVISOR: exec_cmd: vm slot_add_binding R2 0 16 WIC-1T 
+Apr 16 19:38:39.992 HYPERVISOR: exec_cmd: nio create_udp udp-8bd6eb65-0ffa-412b-9be1-5cef171b1a62 10010 127.0.0.1 10011 
+Apr 16 19:38:40.214 HYPERVISOR: exec_cmd: vm slot_add_nio_binding R2 0 0 udp-8bd6eb65-0ffa-412b-9be1-5cef171b1a62 
+Apr 16 19:38:40.215 HYPERVISOR: exec_cmd: vm get_status R2 
+Apr 16 19:38:40.279 HYPERVISOR: exec_cmd: nio create_udp udp-731bb0ff-2b36-4cf4-aa6e-6906aa60cdea 10014 127.0.0.1 10015 
+Apr 16 19:38:40.284 HYPERVISOR: exec_cmd: vm slot_add_nio_binding R2 1 0 udp-731bb0ff-2b36-4cf4-aa6e-6906aa60cdea 
+Apr 16 19:38:40.286 HYPERVISOR: exec_cmd: vm get_status R2 

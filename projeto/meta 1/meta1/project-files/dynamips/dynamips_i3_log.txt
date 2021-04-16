@@ -1,20 +1,35 @@
-Apr 16 18:13:06.155 HYPERVISOR: Release 0.2.21-amd64/Linux (tag 2019071212)
-Apr 16 18:13:06.156 HYPERVISOR: Started on IP = localhost, TCP port = 60243.
-Apr 16 18:13:06.159 HYPERVISOR: exec_cmd: hypervisor version 
-Apr 16 18:13:06.160 HYPERVISOR: exec_cmd: hypervisor working_dir /home/user/Desktop/SharedFolder/IRC/irc2/projeto/meta 1/meta1/project-files/dynamips 
-Apr 16 18:13:06.161 GENERAL: working_dir=/home/user/Desktop/SharedFolder/IRC/irc2/projeto/meta 1/meta1/project-files/dynamips
-Apr 16 18:13:06.161 HYPERVISOR: exec_cmd: hypervisor working_dir /home/user/Desktop/SharedFolder/IRC/irc2/projeto/meta 1/meta1/project-files/dynamips/e8c234a1-b7d5-4d97-af2b-7bb8a219ec65 
-Apr 16 18:13:06.162 GENERAL: working_dir=/home/user/Desktop/SharedFolder/IRC/irc2/projeto/meta 1/meta1/project-files/dynamips/e8c234a1-b7d5-4d97-af2b-7bb8a219ec65
-Apr 16 18:13:06.163 HYPERVISOR: exec_cmd: vm create R3 3 c2600 
-Apr 16 18:13:06.166 VM: VM R3 created.
-Apr 16 18:13:06.167 HYPERVISOR: exec_cmd: vm set_con_tcp_port R3 5002 
-Apr 16 18:13:06.168 HYPERVISOR: exec_cmd: c2600 get_mac_addr R3 
-Apr 16 18:13:06.169 HYPERVISOR: exec_cmd: vm set_ios R3 /home/user/GNS3/images/IOS/c2600-is-mz.123-17a.bin 
-Apr 16 18:13:06.171 HYPERVISOR: exec_cmd: c2600 set_mac_addr R3 c803.0887.0000 
-Apr 16 18:13:06.172 HYPERVISOR: exec_cmd: vm set_nvram R3 200 
-Apr 16 18:13:06.173 HYPERVISOR: exec_cmd: vm set_ram R3 80 
-Apr 16 18:13:06.174 HYPERVISOR: exec_cmd: vm get_status R3 
-Apr 16 18:13:06.175 HYPERVISOR: exec_cmd: vm slot_add_binding R3 1 0 NM-1FE-TX 
-Apr 16 18:13:06.176 HYPERVISOR: exec_cmd: vm set_sparse_mem R3 1 
-Apr 16 18:13:06.177 HYPERVISOR: exec_cmd: vm get_status R3 
-Apr 16 18:13:06.178 HYPERVISOR: exec_cmd: vm slot_add_binding R3 0 16 WIC-1T 
+Apr 16 19:38:38.123 HYPERVISOR: Release 0.2.21-amd64/Linux (tag 2019071212)
+Apr 16 19:38:38.124 HYPERVISOR: Started on IP = localhost, TCP port = 47309.
+Apr 16 19:38:38.131 HYPERVISOR: exec_cmd: hypervisor version 
+Apr 16 19:38:38.132 HYPERVISOR: exec_cmd: hypervisor working_dir /home/user/Desktop/SharedFolder/IRC/irc2/projeto/meta 1/meta1/project-files/dynamips 
+Apr 16 19:38:38.132 GENERAL: working_dir=/home/user/Desktop/SharedFolder/IRC/irc2/projeto/meta 1/meta1/project-files/dynamips
+Apr 16 19:38:38.133 HYPERVISOR: exec_cmd: hypervisor working_dir /home/user/Desktop/SharedFolder/IRC/irc2/projeto/meta 1/meta1/project-files/dynamips/e8c234a1-b7d5-4d97-af2b-7bb8a219ec65 
+Apr 16 19:38:38.134 GENERAL: working_dir=/home/user/Desktop/SharedFolder/IRC/irc2/projeto/meta 1/meta1/project-files/dynamips/e8c234a1-b7d5-4d97-af2b-7bb8a219ec65
+Apr 16 19:38:38.134 HYPERVISOR: exec_cmd: vm create R3 3 c2600 
+Apr 16 19:38:38.137 VM: VM R3 created.
+Apr 16 19:38:38.138 HYPERVISOR: exec_cmd: vm set_con_tcp_port R3 5002 
+Apr 16 19:38:38.139 HYPERVISOR: exec_cmd: c2600 get_mac_addr R3 
+Apr 16 19:38:38.140 HYPERVISOR: exec_cmd: vm set_ios R3 /home/user/GNS3/images/IOS/c2600-is-mz.123-17a.bin 
+Apr 16 19:38:38.141 HYPERVISOR: exec_cmd: c2600 set_mac_addr R3 c803.0887.0000 
+Apr 16 19:38:38.142 HYPERVISOR: exec_cmd: vm set_nvram R3 200 
+Apr 16 19:38:38.143 HYPERVISOR: exec_cmd: vm set_ram R3 80 
+Apr 16 19:38:38.144 HYPERVISOR: exec_cmd: vm get_status R3 
+Apr 16 19:38:38.145 HYPERVISOR: exec_cmd: vm slot_add_binding R3 1 0 NM-1FE-TX 
+Apr 16 19:38:38.146 HYPERVISOR: exec_cmd: vm set_sparse_mem R3 1 
+Apr 16 19:38:38.147 HYPERVISOR: exec_cmd: vm get_status R3 
+Apr 16 19:38:38.148 HYPERVISOR: exec_cmd: vm slot_add_binding R3 0 16 WIC-1T 
+Apr 16 19:38:39.334 HYPERVISOR: exec_cmd: nio create_udp udp-13322811-4dc0-489b-8c54-d4852cb5f5f4 10002 127.0.0.1 10003 
+Apr 16 19:38:39.563 HYPERVISOR: exec_cmd: vm slot_add_nio_binding R3 0 0 udp-13322811-4dc0-489b-8c54-d4852cb5f5f4 
+Apr 16 19:38:39.564 HYPERVISOR: exec_cmd: vm get_status R3 
+Apr 16 19:38:40.640 HYPERVISOR: exec_cmd: nio create_udp udp-bb8129d2-3222-4589-887d-d0b890f32d87 10026 127.0.0.1 10027 
+Apr 16 19:38:40.644 HYPERVISOR: exec_cmd: vm slot_add_nio_binding R3 1 0 udp-bb8129d2-3222-4589-887d-d0b890f32d87 
+Apr 16 19:38:40.646 HYPERVISOR: exec_cmd: vm get_status R3 
+Apr 16 19:38:53.718 HYPERVISOR: exec_cmd: vm create Ghost 0 c2600 
+Apr 16 19:38:53.721 VM: VM Ghost created.
+Apr 16 19:38:53.722 HYPERVISOR: exec_cmd: vm set_ios Ghost /home/user/GNS3/images/IOS/c2600-is-mz.123-17a.bin 
+Apr 16 19:38:53.722 HYPERVISOR: exec_cmd: vm set_ghost_status Ghost 1 
+Apr 16 19:38:53.723 HYPERVISOR: exec_cmd: vm set_ghost_file Ghost /home/user/Desktop/SharedFolder/IRC/irc2/projeto/meta 1/meta1/project-files/dynamips/c2600-is-mz.123-17a.bin-80.ghost 
+Apr 16 19:38:53.725 HYPERVISOR: exec_cmd: vm set_ram Ghost 80 
+Apr 16 19:38:53.726 HYPERVISOR: exec_cmd: vm get_status Ghost 
+Apr 16 19:38:53.728 HYPERVISOR: exec_cmd: vm set_config Ghost configs/i0_startup-config.cfg 
+Apr 16 19:38:53.728 HYPERVISOR: exec_cmd: vm start Ghost 
