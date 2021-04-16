@@ -3,14 +3,14 @@
 #
 
 
-# Static config for eth0
-#auto eth0
-#iface eth0 inet static
-#	address 192.168.0.2
-#	netmask 255.255.255.0
-#	gateway 192.168.0.1
-#	up echo nameserver 192.168.0.1 > /etc/resolv.conf
+#Static config for eth0
+auto eth0
+iface eth0 inet static
+	address 193.136.212.194
+	netmask 255.255.255.224
+	gateway 193.136.212.195
+	up echo nameserver 193.136.212.195 > /etc/resolv.conf
 
-# DHCP config for eth0
-# auto eth0
-# iface eth0 inet dhcp
+#DHCP config for eth0
+#auto eth0
+#iface eth0 inet dhcp

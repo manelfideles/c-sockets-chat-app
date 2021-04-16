@@ -1,1 +1,0 @@
-Apr 15 18:12:34.923 VM: trying to shutdown an inactive VM.

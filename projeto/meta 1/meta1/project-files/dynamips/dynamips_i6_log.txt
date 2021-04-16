@@ -1,19 +1,6 @@
-Apr 15 17:44:36.237 HYPERVISOR: Release 0.2.21-amd64/Linux (tag 2019071212)
-Apr 15 17:44:36.237 HYPERVISOR: Started on IP = localhost, TCP port = 57861.
-Apr 15 17:44:36.246 HYPERVISOR: exec_cmd: hypervisor version 
-Apr 15 17:44:36.247 HYPERVISOR: exec_cmd: hypervisor working_dir /home/user/Desktop/SharedFolder/IRC/irc2/projeto/meta 1/meta1/project-files/dynamips 
-Apr 15 17:44:36.248 GENERAL: working_dir=/home/user/Desktop/SharedFolder/IRC/irc2/projeto/meta 1/meta1/project-files/dynamips
-Apr 15 17:44:36.248 HYPERVISOR: exec_cmd: ethsw create SW3 
-Apr 15 17:44:37.301 HYPERVISOR: exec_cmd: nio create_udp udp-f1c59d20-48d8-4fdf-b66a-5353219a9eb0 10017 127.0.0.1 10016 
-Apr 15 17:44:37.302 HYPERVISOR: exec_cmd: ethsw add_nio SW3 udp-f1c59d20-48d8-4fdf-b66a-5353219a9eb0 
-Apr 15 17:44:37.321 HYPERVISOR: exec_cmd: ethsw set_access_port SW3 udp-f1c59d20-48d8-4fdf-b66a-5353219a9eb0 1 
-Apr 15 17:47:12.283 HYPERVISOR: exec_cmd: nio create_udp udp-f9ee7f22-921e-488e-8965-c65aa7dbfff5 10025 127.0.0.1 10024 
-Apr 15 17:47:12.285 HYPERVISOR: exec_cmd: ethsw add_nio SW3 udp-f9ee7f22-921e-488e-8965-c65aa7dbfff5 
-Apr 15 17:47:12.297 HYPERVISOR: exec_cmd: ethsw set_access_port SW3 udp-f9ee7f22-921e-488e-8965-c65aa7dbfff5 1 
-Apr 15 17:47:15.998 HYPERVISOR: exec_cmd: nio create_udp udp-0ed4da87-8508-465b-8d41-9bee04c8e855 10027 127.0.0.1 10026 
-Apr 15 17:47:16.000 HYPERVISOR: exec_cmd: ethsw add_nio SW3 udp-0ed4da87-8508-465b-8d41-9bee04c8e855 
-Apr 15 17:47:16.017 HYPERVISOR: exec_cmd: ethsw set_access_port SW3 udp-0ed4da87-8508-465b-8d41-9bee04c8e855 1 
-Apr 15 18:12:34.478 HYPERVISOR: exec_cmd: ethsw delete SW3 
-Apr 15 18:12:34.533 HYPERVISOR: exec_cmd: hypervisor stop 
-Apr 15 18:12:34.901 HYPERVISOR: Stopped.
-Apr 15 18:12:34.910 GENERAL: reset done.
+Apr 16 18:13:06.337 HYPERVISOR: Release 0.2.21-amd64/Linux (tag 2019071212)
+Apr 16 18:13:06.338 HYPERVISOR: Started on IP = localhost, TCP port = 44329.
+Apr 16 18:13:06.340 HYPERVISOR: exec_cmd: hypervisor version 
+Apr 16 18:13:06.341 HYPERVISOR: exec_cmd: hypervisor working_dir /home/user/Desktop/SharedFolder/IRC/irc2/projeto/meta 1/meta1/project-files/dynamips 
+Apr 16 18:13:06.341 GENERAL: working_dir=/home/user/Desktop/SharedFolder/IRC/irc2/projeto/meta 1/meta1/project-files/dynamips
+Apr 16 18:13:06.342 HYPERVISOR: exec_cmd: ethsw create SW3 

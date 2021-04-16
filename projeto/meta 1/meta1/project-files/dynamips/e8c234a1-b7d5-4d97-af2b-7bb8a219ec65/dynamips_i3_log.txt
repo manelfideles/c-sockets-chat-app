@@ -1,0 +1,51 @@
+Apr 15 17:44:36.060 HYPERVISOR: Release 0.2.21-amd64/Linux (tag 2019071212)
+Apr 15 17:44:36.061 HYPERVISOR: Started on IP = localhost, TCP port = 36601.
+Apr 15 17:44:36.069 HYPERVISOR: exec_cmd: hypervisor version 
+Apr 15 17:44:36.070 HYPERVISOR: exec_cmd: hypervisor working_dir /home/user/Desktop/SharedFolder/IRC/irc2/projeto/meta 1/meta1/project-files/dynamips 
+Apr 15 17:44:36.070 GENERAL: working_dir=/home/user/Desktop/SharedFolder/IRC/irc2/projeto/meta 1/meta1/project-files/dynamips
+Apr 15 17:44:36.071 HYPERVISOR: exec_cmd: hypervisor working_dir /home/user/Desktop/SharedFolder/IRC/irc2/projeto/meta 1/meta1/project-files/dynamips/e8c234a1-b7d5-4d97-af2b-7bb8a219ec65 
+Apr 15 17:44:36.072 GENERAL: working_dir=/home/user/Desktop/SharedFolder/IRC/irc2/projeto/meta 1/meta1/project-files/dynamips/e8c234a1-b7d5-4d97-af2b-7bb8a219ec65
+Apr 15 17:44:36.072 HYPERVISOR: exec_cmd: vm create R3 3 c2600 
+Apr 15 17:44:36.074 VM: VM R3 created.
+Apr 15 17:44:36.075 HYPERVISOR: exec_cmd: vm set_con_tcp_port R3 5002 
+Apr 15 17:44:36.076 HYPERVISOR: exec_cmd: c2600 get_mac_addr R3 
+Apr 15 17:44:36.077 HYPERVISOR: exec_cmd: vm set_ios R3 /home/user/GNS3/images/IOS/c2600-is-mz.123-17a.bin 
+Apr 15 17:44:36.078 HYPERVISOR: exec_cmd: c2600 set_mac_addr R3 c803.0887.0000 
+Apr 15 17:44:36.079 HYPERVISOR: exec_cmd: vm set_nvram R3 200 
+Apr 15 17:44:36.080 HYPERVISOR: exec_cmd: vm set_ram R3 80 
+Apr 15 17:44:36.080 HYPERVISOR: exec_cmd: vm get_status R3 
+Apr 15 17:44:36.081 HYPERVISOR: exec_cmd: vm slot_add_binding R3 1 0 NM-1FE-TX 
+Apr 15 17:44:36.082 HYPERVISOR: exec_cmd: vm set_sparse_mem R3 1 
+Apr 15 17:44:36.082 HYPERVISOR: exec_cmd: vm get_status R3 
+Apr 15 17:44:36.083 HYPERVISOR: exec_cmd: vm slot_add_binding R3 0 16 WIC-1T 
+Apr 15 17:44:36.293 HYPERVISOR: exec_cmd: nio create_udp udp-71d5c9f3-245d-4ce5-b326-4c2966041e79 10002 127.0.0.1 10003 
+Apr 15 17:44:36.520 HYPERVISOR: exec_cmd: vm slot_add_nio_binding R3 0 0 udp-71d5c9f3-245d-4ce5-b326-4c2966041e79 
+Apr 15 17:44:36.521 HYPERVISOR: exec_cmd: vm get_status R3 
+Apr 15 17:45:47.157 HYPERVISOR: exec_cmd: vm set_ios R3 /home/user/GNS3/images/IOS/c2600-is-mz.123-17a.bin 
+Apr 15 17:45:47.279 HYPERVISOR: exec_cmd: vm set_ios R3 /home/user/GNS3/images/IOS/c2600-is-mz.123-17a.bin 
+Apr 15 17:45:47.520 HYPERVISOR: exec_cmd: vm set_ios R3 /home/user/GNS3/images/IOS/c2600-is-mz.123-17a.bin 
+Apr 15 17:46:45.638 HYPERVISOR: exec_cmd: vm set_ios R3 /home/user/GNS3/images/IOS/c2600-is-mz.123-17a.bin 
+Apr 15 17:46:45.697 HYPERVISOR: exec_cmd: vm set_ios R3 /home/user/GNS3/images/IOS/c2600-is-mz.123-17a.bin 
+Apr 15 17:46:45.756 HYPERVISOR: exec_cmd: vm set_ios R3 /home/user/GNS3/images/IOS/c2600-is-mz.123-17a.bin 
+Apr 15 17:47:32.375 HYPERVISOR: exec_cmd: vm set_ios R3 /home/user/GNS3/images/IOS/c2600-is-mz.123-17a.bin 
+Apr 15 17:47:32.487 HYPERVISOR: exec_cmd: vm set_ios R3 /home/user/GNS3/images/IOS/c2600-is-mz.123-17a.bin 
+Apr 15 17:47:32.601 HYPERVISOR: exec_cmd: vm set_ios R3 /home/user/GNS3/images/IOS/c2600-is-mz.123-17a.bin 
+Apr 15 17:47:49.336 HYPERVISOR: exec_cmd: vm set_ios R3 /home/user/GNS3/images/IOS/c2600-is-mz.123-17a.bin 
+Apr 15 17:47:53.149 HYPERVISOR: exec_cmd: vm set_ios R3 /home/user/GNS3/images/IOS/c2600-is-mz.123-17a.bin 
+Apr 15 17:47:53.314 HYPERVISOR: exec_cmd: vm set_ios R3 /home/user/GNS3/images/IOS/c2600-is-mz.123-17a.bin 
+Apr 15 17:47:53.417 HYPERVISOR: exec_cmd: vm set_ios R3 /home/user/GNS3/images/IOS/c2600-is-mz.123-17a.bin 
+Apr 15 17:48:09.081 HYPERVISOR: exec_cmd: vm set_ios R3 /home/user/GNS3/images/IOS/c2600-is-mz.123-17a.bin 
+Apr 15 17:48:09.199 HYPERVISOR: exec_cmd: vm set_ios R3 /home/user/GNS3/images/IOS/c2600-is-mz.123-17a.bin 
+Apr 15 17:48:09.381 HYPERVISOR: exec_cmd: vm set_ios R3 /home/user/GNS3/images/IOS/c2600-is-mz.123-17a.bin 
+Apr 15 17:50:17.048 HYPERVISOR: exec_cmd: nio create_udp udp-c150b4c4-0aab-4b1d-9803-265815f673b9 10030 127.0.0.1 10031 
+Apr 15 17:50:17.054 HYPERVISOR: exec_cmd: vm slot_add_nio_binding R3 1 0 udp-c150b4c4-0aab-4b1d-9803-265815f673b9 
+Apr 15 17:50:17.056 HYPERVISOR: exec_cmd: vm get_status R3 
+Apr 15 18:12:20.193 HYPERVISOR: exec_cmd: vm get_status R3 
+Apr 15 18:12:20.201 HYPERVISOR: exec_cmd: vm extract_config R3 
+Apr 15 18:12:35.030 HYPERVISOR: exec_cmd: vm get_status R3 
+Apr 15 18:12:35.034 HYPERVISOR: exec_cmd: vm extract_config R3 
+Apr 15 18:12:35.062 HYPERVISOR: exec_cmd: vm delete R3 
+Apr 15 18:12:35.066 VM: VM R3 destroyed.
+Apr 15 18:12:35.151 HYPERVISOR: exec_cmd: hypervisor stop 
+Apr 15 18:12:35.225 HYPERVISOR: Stopped.
+Apr 15 18:12:35.225 GENERAL: reset done.
