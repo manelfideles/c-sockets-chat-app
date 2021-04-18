@@ -1,0 +1,35 @@
+Apr 18 09:58:38.654 HYPERVISOR: Release 0.2.21-amd64/Linux (tag 2019071212)
+Apr 18 09:58:38.655 HYPERVISOR: Started on IP = localhost, TCP port = 45747.
+Apr 18 09:58:38.662 HYPERVISOR: exec_cmd: hypervisor version 
+Apr 18 09:58:38.662 HYPERVISOR: exec_cmd: hypervisor working_dir /home/user/Desktop/SharedFolder/IRC/irc2/projeto/meta 1/meta1/project-files/dynamips 
+Apr 18 09:58:38.663 GENERAL: working_dir=/home/user/Desktop/SharedFolder/IRC/irc2/projeto/meta 1/meta1/project-files/dynamips
+Apr 18 09:58:38.664 HYPERVISOR: exec_cmd: hypervisor working_dir /home/user/Desktop/SharedFolder/IRC/irc2/projeto/meta 1/meta1/project-files/dynamips/16cff736-3f0c-4344-847c-c3d272ee9034 
+Apr 18 09:58:38.664 GENERAL: working_dir=/home/user/Desktop/SharedFolder/IRC/irc2/projeto/meta 1/meta1/project-files/dynamips/16cff736-3f0c-4344-847c-c3d272ee9034
+Apr 18 09:58:38.665 HYPERVISOR: exec_cmd: vm create R2 2 c2600 
+Apr 18 09:58:38.667 VM: VM R2 created.
+Apr 18 09:58:38.668 HYPERVISOR: exec_cmd: vm set_con_tcp_port R2 5001 
+Apr 18 09:58:38.669 HYPERVISOR: exec_cmd: c2600 get_mac_addr R2 
+Apr 18 09:58:38.670 HYPERVISOR: exec_cmd: vm set_ios R2 /home/user/GNS3/images/IOS/c2600-is-mz.123-17a.bin 
+Apr 18 09:58:38.671 HYPERVISOR: exec_cmd: c2600 set_mac_addr R2 c802.0877.0000 
+Apr 18 09:58:38.672 HYPERVISOR: exec_cmd: vm set_nvram R2 200 
+Apr 18 09:58:38.672 HYPERVISOR: exec_cmd: vm set_ram R2 80 
+Apr 18 09:58:38.673 HYPERVISOR: exec_cmd: vm get_status R2 
+Apr 18 09:58:38.674 HYPERVISOR: exec_cmd: vm slot_add_binding R2 1 0 NM-1FE-TX 
+Apr 18 09:58:38.674 HYPERVISOR: exec_cmd: vm set_sparse_mem R2 1 
+Apr 18 09:58:38.675 HYPERVISOR: exec_cmd: vm get_status R2 
+Apr 18 09:58:38.676 HYPERVISOR: exec_cmd: vm slot_add_binding R2 0 16 WIC-1T 
+Apr 18 09:58:40.832 HYPERVISOR: exec_cmd: nio create_udp udp-57175d8b-02f0-4702-9dac-483a72a9750c 10010 127.0.0.1 10011 
+Apr 18 09:58:41.053 HYPERVISOR: exec_cmd: vm slot_add_nio_binding R2 0 0 udp-57175d8b-02f0-4702-9dac-483a72a9750c 
+Apr 18 09:58:41.057 HYPERVISOR: exec_cmd: vm get_status R2 
+Apr 18 09:58:41.183 HYPERVISOR: exec_cmd: nio create_udp udp-cd46ce49-41cc-488c-a0bb-c19f1e6fcb1c 10014 127.0.0.1 10015 
+Apr 18 09:58:41.186 HYPERVISOR: exec_cmd: vm slot_add_nio_binding R2 1 0 udp-cd46ce49-41cc-488c-a0bb-c19f1e6fcb1c 
+Apr 18 09:58:41.218 HYPERVISOR: exec_cmd: vm get_status R2 
+Apr 18 09:59:57.382 HYPERVISOR: exec_cmd: vm get_status R2 
+Apr 18 09:59:57.407 HYPERVISOR: exec_cmd: vm extract_config R2 
+Apr 18 10:00:11.788 HYPERVISOR: exec_cmd: vm get_status R2 
+Apr 18 10:00:11.794 HYPERVISOR: exec_cmd: vm extract_config R2 
+Apr 18 10:00:11.796 HYPERVISOR: exec_cmd: vm delete R2 
+Apr 18 10:00:11.798 VM: VM R2 destroyed.
+Apr 18 10:00:11.808 HYPERVISOR: exec_cmd: hypervisor stop 
+Apr 18 10:00:11.895 HYPERVISOR: Stopped.
+Apr 18 10:00:11.895 GENERAL: reset done.
