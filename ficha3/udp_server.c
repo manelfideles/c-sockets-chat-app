@@ -50,7 +50,7 @@ int main(void)
 
 		int totalChars = 0;
 
-		for (int i = 0; buf[i] != '\0'; i++)
+		for (int i = 0; buf[i] != '\n'; i++)
 			totalChars++;
 
 		printf("Recebi uma mensagem do sistema com o endereço %s e o porto %d\n", inet_ntoa(si_outra.sin_addr), ntohs(si_outra.sin_port));

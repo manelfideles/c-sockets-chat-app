@@ -150,7 +150,7 @@ void handleClient(int fd, struct sockaddr_in client_addr)
   cleanup(fd, dados, buffer);
   printf("Client %d's memory has been freed.\n", clientCount);
   printf("Client %d at %s:%d has left.\n", clientCount, inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port));
-  //exit(0);
+  exit(0);
 }
 
 void sendMsg(int fd, char msg[])

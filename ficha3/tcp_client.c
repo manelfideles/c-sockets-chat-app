@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
 
   while (1)
   {
-    printf("Insira um comando: ");
+    printf("Insira um comando [DADOS | SOMA | MEDIA | SAIR]: ");
     char comando[32];
     if (fgets(comando, sizeof(comando), stdin))
     {
