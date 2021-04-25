@@ -19,7 +19,7 @@
 #define SERVER_PORT 9000
 #define BUF_SIZE 1024
 
-void handleClient(int fd);
+void handleClient(int fd, struct sockaddr_in client_addr);
 void sendMsg(int fd, char msg[]);
 char *receiveMsg(int fd);
 int execDados(int fd, int dados[], int n);
@@ -28,8 +28,8 @@ float execMedia(int dados[], int n);
 int isNumber(char s[]);
 void erro(char *msg);
 void raiseSigint();
-void sigintHandler(int fd, int *dados, char *buffer);
-void printNumbers(int *dados);
+void cleanup(int fd, int *dados, char *buffer);
+void printNumbers(int dados[], int n);
 
 int clientCount = 0;
 int sigint = 0;
@@ -62,9 +62,10 @@ int main()
   // escuta na socket definida
   if (listen(fd, 5) < 0)
     erro("na funcao listen");
-
   printf("Server listening...\n");
-  while (1)
+
+  //signal(SIGINT, raiseSigint);
+  while (1 /*!sigint*/)
   {
     //clean finished child processes, avoiding zombies
     //must use WNOHANG or would block whenever a child process was working
@@ -79,25 +80,31 @@ int main()
     {
       if (fork() == 0)
       {
-        handleClient(client);
         close(fd);
+        handleClient(client, client_addr);
         exit(0);
       }
       close(client);
     }
   }
+  printf("Server exiting.\n");
+  close(client);
+  cleanup(fd, NULL, NULL);
+  printf("Server exited.\n");
+  //exit(0);
   return 0;
 }
 
-void handleClient(int fd)
+void handleClient(int fd, struct sockaddr_in client_addr)
 {
+  printf("Client %d at %s:%d has established a connection!\n", clientCount, inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port));
   char *buffer = NULL;
   int n = 10;
   int *dados = (int *)malloc(n * sizeof(int));
   int isEmpty = 1;
 
-  signal(SIGINT, raiseSigint);
-  while (!sigint)
+  //signal(SIGINT, raiseSigint);
+  while (1 /*!sigint*/)
   {
     buffer = receiveMsg(fd);
     if (strcmp(buffer, "DADOS") == 0)
@@ -112,7 +119,7 @@ void handleClient(int fd)
     {
       if (!isEmpty)
       {
-        sprintf(buffer, "%d\n", execSoma(dados, n));
+        sprintf(buffer, "Resultado: %d\n", execSoma(dados, n));
         sendMsg(fd, buffer);
         //buffer[0] = '\0';
       }
@@ -123,7 +130,7 @@ void handleClient(int fd)
     {
       if (!isEmpty)
       {
-        sprintf(buffer, "%.2f\n", execMedia(dados, n));
+        sprintf(buffer, "Resultado: %.2f\n", execMedia(dados, n));
         sendMsg(fd, buffer);
         //buffer[0] = '\0';
       }
@@ -132,16 +139,18 @@ void handleClient(int fd)
     }
     else if (strcmp(buffer, "SAIR") == 0)
     {
-      sendMsg(fd, "SAIR\n");
-      free(dados);
-      free(buffer);
+      //sendMsg(fd, "SAIR\n");
+      // free(dados);
+      // free(buffer);
       break;
     }
     else
       sendMsg(fd, "Erro: Comando nao existe.\n");
   }
-  printf("Quitting the program...\n");
-  sigintHandler(fd, dados, buffer);
+  cleanup(fd, dados, buffer);
+  printf("Client %d's memory has been freed.\n", clientCount);
+  printf("Client %d at %s:%d has left.\n", clientCount, inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port));
+  //exit(0);
 }
 
 void sendMsg(int fd, char msg[])
@@ -153,7 +162,9 @@ void sendMsg(int fd, char msg[])
 char *receiveMsg(int fd)
 {
   char *buffer = (char *)malloc(BUF_SIZE);
-  int nread = read(fd, buffer, BUF_SIZE - 1);
+  int nread;
+  if ((nread = read(fd, buffer, BUF_SIZE - 1)) == -1)
+    erro("na funcao receiveMsg");
   buffer[nread] = '\0';
 
   printf("Received: %s\n", buffer);
@@ -168,17 +179,20 @@ int execDados(int fd, int *dados, int n)
 
   while (i < n)
   {
-    sprintf(buf, "Insira o numero %d:\n", i + 1);
+    sprintf(buf, "Insira o numero #%d:\n", i + 1);
     sendMsg(fd, buf);
     char *reply = receiveMsg(fd);
     if (isNumber(reply))
+    {
       dados[i] = atoi(reply);
+      printf("Added number to array!\n");
+    }
     else
       return 1;
     i++;
   }
   printf("DADOS: ");
-  printNumbers(dados);
+  printNumbers(dados, n);
   return 0;
 }
 
@@ -190,17 +204,18 @@ int execSoma(int dados[], int n)
   return sum;
 }
 
-void printNumbers(int *dados)
+void printNumbers(int dados[], int n)
 {
   printf("[");
-  while (dados)
-    printf("%d", *(dados++));
+  for (int i = 0; i < n; i++)
+    printf(" %d ", dados[i]);
   printf("]\n");
+  fflush(stdout);
 }
 
 float execMedia(int dados[], int n)
 {
-  return execSoma(dados, n) / n;
+  return (float)execSoma(dados, n) / n;
 }
 
 int isNumber(char s[])
@@ -222,13 +237,12 @@ void raiseSigint()
   sigint = 1;
 }
 
-void sigintHandler(int fd, int *dados, char *buffer)
+void cleanup(int fd, int *dados, char *buffer)
 {
   if (dados)
     free(dados);
   if (buffer)
     free(buffer);
   close(fd);
-  exit(0);
   //printf("Program terminated.\n");
 }

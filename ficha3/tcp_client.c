@@ -18,13 +18,14 @@
 
 void erro(char *msg);
 void sendMsg(int fd, char buffer[]);
-void receiveMsg(int fd);
+char *receiveMsg(int fd);
 void erro(char *msg);
 
 int main(int argc, char *argv[])
 {
   char endServer[100];
   char buffer[BUF_SIZE];
+  char *buf = NULL;
   int fd;
   struct sockaddr_in addr;
   struct hostent *hostPtr;
@@ -57,12 +58,12 @@ int main(int argc, char *argv[])
     {
       comando[strcspn(comando, "\r\n")] = 0;
       sendMsg(fd, comando);
-      printf("> %s\n", comando);
+      //printf("> --%s--\n", comando);
     }
     else
       erro("fgets");
 
-    receiveMsg(fd);
+    buf = receiveMsg(fd);
     if (strcmp(comando, "DADOS") == 0)
     {
       int i = 0;
@@ -70,16 +71,25 @@ int main(int argc, char *argv[])
       {
         scanf("%s", buffer);
         fflush(stdin);
+        //buffer[strcspn(buffer, "\r\n")] = 0;
         sendMsg(fd, buffer);
         if (i == 9)
           break;
         else
         {
-          printf("Waiting for reply.\n");
-          receiveMsg(fd);
+          //printf("Waiting for reply.\n");
+          buf = receiveMsg(fd);
+          if (strcmp(buf, "Erro: Input invalido.\n") == 0)
+            break;
         }
         i++;
       }
+    }
+    if (strcmp(comando, "SAIR") == 0)
+    {
+      printf("Client Exiting.\n");
+      close(fd);
+      exit(0);
     }
   }
   close(fd);
@@ -92,15 +102,17 @@ void sendMsg(int fd, char msg[])
     erro("na funcao sendMsg");
 }
 
-void receiveMsg(int fd)
+char *receiveMsg(int fd)
 {
-  char buffer[BUF_SIZE];
+  char *buffer = (char *)malloc(BUF_SIZE);
   int nread;
   if ((nread = read(fd, buffer, BUF_SIZE - 1)) == -1)
     erro("na funcao receiveMsg");
   buffer[nread] = '\0';
+
   printf("%s", buffer);
   //fflush(stdout);
+  return buffer;
 }
 
 void erro(char *msg)
