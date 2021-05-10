@@ -2,9 +2,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
-//#include "structUser.h"
-#include "menus.h"
+#include "structUser.h"
 #include "fileIO.h"
+#include "menus.h"
 
 #define OPTSIZE 32
 int debug = 0;
@@ -25,6 +25,7 @@ int getOption()
     }
     else
         erro("getOption", "fgets");
+    return 0;
 }
 
 /**
@@ -34,15 +35,17 @@ int getOption()
 */
 char *getTextField()
 {
-    char buf[OPTSIZE];
+    char buf[1024];
     char *str = (char *)malloc(1024);
-    if (fgets(buf, OPTSIZE, stdin))
+    if (fgets(buf, 1024, stdin))
     {
-        sscanf(buf, "%s", str);
+        buf[strcspn(buf, "\n")] = 0;
+        strcpy(str, buf);
         return str;
     }
     else
         erro("getTextField", "fgets");
+    return NULL;
 }
 
 /**
@@ -51,69 +54,54 @@ char *getTextField()
 */
 void mainMenu()
 {
-    system("cls || clear"); /* Win & Unix */
+    // system("cls || clear"); /* Win & Unix */
     printf("Main Menu\n");
     printf("---------\n");
-    char options[2][64] = {"Login", "Sair"};
+    char options[2][64] = {"Login", "Quit"};
     for (int i = 0; i < 2; i++)
         printf("> %d - %s\n", i, options[i]);
     printf("Insert an option: ");
-    int opt = getOption();
-
-    if (debug)
-        printf("Option: %d\nAction: %s\n", opt, options[opt]);
-
-    /*
-    Option Handling
-    */
 }
 
 /**
  * Prints login menu options
-*/
-void loginMenu()
+ */
+char *loginMenu()
 {
-    system("cls || clear"); /* Win & Unix */
+    // system("cls || clear"); /* Win & Unix */
+    char *credentials = (char *)malloc(256);
     printf("Login Menu\n");
-    printf("----------\n");
+    printf("------------------------------\n");
 
     printf("Insert your login credentials.\n");
     printf("User ID: ");
     char *userId = getTextField();
     printf("Password: ");
     char *password = getTextField();
-
+    sprintf(credentials, "%s %s", userId, password);
     if (debug)
+    {
         printf("UserId: %s\nPassword: %s\n", userId, password);
-
-    /*
-    Credential Handling
-    */
+        printf("Credentials: %s\n", credentials);
+    }
+    return credentials;
 }
 
 /**
  * Prints authorized communications for a given user.
  * 
 */
-void authorizedCommsMenu()
+void authorizedCommsMenu(User *u)
 {
-    system("cls || clear"); /* Win & Unix */
+    // system("cls || clear"); /* Win & Unix */
     printf("Authorized Communications Menu\n");
     printf("------------------------------\n");
-
-    char options[4][64] = {"Client-Server", "P2P", "Multicast", "Voltar"};
-    for (int i = 0; i < 4; i++)
-        printf("> %d - %s\n", i, options[i]);
-
+    char options[4][64] = {"Client-Server", "P2P", "Multicast", "Logout"};
+    for (int i = 0; i < 3; i++)
+        if (u->permissions[i])
+            printf("> %d - %s\n", i, options[i]);
+    printf("> 4 - %s\n", options[3]);
     printf("Insert an option: ");
-    int opt = getOption();
-
-    if (debug)
-        printf("Option: %d\nAction: %s\n", opt, options[opt]);
-
-    /*
-    Option Handling
-    */
 }
 
 /**
@@ -121,21 +109,24 @@ void authorizedCommsMenu()
 */
 void clientServerMenu()
 {
-    system("cls || clear"); /* Win & Unix */
+    // system("cls || clear"); /* Win & Unix */
     printf("Client-Server Menu\n");
-    printf("------------------\n");
-    char options[3][64] = {"Set Destination ID", "Send Message", "Voltar"};
+    printf("------------------------------\n");
+    char options[3][64] = {"Set Destination ID", "Send Message", "Return"};
     for (int i = 0; i < 3; i++)
         printf("> %d - %s\n", i, options[i]);
     printf("Insert an option: ");
-    int opt = getOption();
+}
 
-    if (debug)
-        printf("Option: %d\nAction: %s\n", opt, options[opt]);
-
-    /*
-    Option Handling
-    */
+/**
+ * Prints Admin controls.
+*/
+void adminMenu()
+{
+    // system("cls || clear"); /* Win & Unix */
+    printf("Admin Menu\n");
+    printf("------------------------------\n");
+    printf("Insert a command [ LIST | ADD | DEL | QUIT ]: ");
 }
 
 /**
@@ -143,21 +134,13 @@ void clientServerMenu()
 */
 void p2pMenu()
 {
-    system("cls || clear"); /* Win & Unix */
+    // system("cls || clear"); /* Win & Unix */
     printf("P2P Menu\n");
-    printf("------------------\n");
-    char options[4][64] = {"Set Destination IP Address", "Set Destination Port", "Send P2P Request", "Voltar"};
+    printf("------------------------------\n");
+    char options[4][64] = {"Set Destination IP Address", "Set Destination Port", "Send P2P Request", "Return"};
     for (int i = 0; i < 4; i++)
         printf("> %d - %s\n", i, options[i]);
     printf("Insert an option: ");
-    int opt = getOption();
-
-    if (debug)
-        printf("Option: %d\nAction: %s\n", opt, options[opt]);
-
-    /*
-    Option Handling
-    */
 }
 
 /**
@@ -165,31 +148,21 @@ void p2pMenu()
 */
 void multicastMenu()
 {
-    system("cls || clear"); /* Win & Unix */
+    // system("cls || clear"); /* Win & Unix */
     printf("Multicast Menu\n");
-    printf("------------------\n");
+    printf("------------------------------\n");
     printf("Available Multicast Groups\n");
     // TODO: printMulticastGroups - envia request dos grupos assim que este menu é chamado
     printf("--------------------------\n");
-
-    char options[3][64] = {"Create Multicast Group", "Join Multicast Group", "Voltar"};
+    char options[3][64] = {"Create Multicast Group", "Join Multicast Group", "Return"};
     for (int i = 0; i < 3; i++)
         printf("> %d - %s\n", i, options[i]);
     printf("Insert an option: ");
-    int opt = getOption();
-
-    if (debug)
-        printf("Option: %d\nAction: %s\n", opt, options[opt]);
-
-    /*
-    Option Handling
-    */
 }
 
 /*
  * Driver program to test above functions.
  *
-*/
 int main()
 {
     mainMenu();
@@ -199,3 +172,5 @@ int main()
     p2pMenu();
     multicastMenu();
 }
+
+*/

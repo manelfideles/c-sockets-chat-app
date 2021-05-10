@@ -1,0 +1,5 @@
+ruben,127.0.0.1,ruben,1,1,1
+fabio,127.0.0.2,fabio,1,1,0
+paulo,127.0.0.6,paulo,1,0,1
+fabricio,127.0.0.3,fabricio,1,1,1
+garibaldo,127.0.0.4,garibaldo,0,0,1

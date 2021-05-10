@@ -23,12 +23,30 @@ void erro(char *function, char *method)
  * Reads string and outputs a User object.
  * 
  */
-User *stringToUser(char *userString)
+User *stringToUser(char *userString, char *delim)
 {
-    char id[64], ip[64], pw[64];
     User *u = (User *)malloc(sizeof(User));
-    if (sscanf(userString, "%[^,],%[^,],%[^,],%d,%d,%d", id, ip, pw, &(u->permissions[0]), &(u->permissions[1]), &(u->permissions[2])) < 6)
-        erro("stringToUser", "sscanf");
+    char id[64], ip[64], pw[64];
+    if (!strcmp(delim, ","))
+    {
+        if (sscanf(userString, "%[^,],%[^,],%[^,],%d,%d,%d",
+                   id, ip, pw,
+                   &(u->permissions[0]),
+                   &(u->permissions[1]),
+                   &(u->permissions[2])) < 6)
+            erro("stringToUser", "sscanf");
+    }
+    else if (!strcmp(delim, " "))
+    {
+        if (sscanf(userString, "%s %s %s %d %d %d",
+                   id, ip, pw,
+                   &(u->permissions[0]),
+                   &(u->permissions[1]),
+                   &(u->permissions[2])) < 6)
+            erro("stringToUser", "sscanf");
+    }
+    else
+        return NULL;
     strcpy(u->userId, id);
     strcpy(u->ipAddr, ip);
     strcpy(u->password, pw);
@@ -56,7 +74,7 @@ User *searchUserOnFile(char *path, char *userId)
         {
             if (fclose(fin))
                 erro("searchUserOnFile", "fclose");
-            return stringToUser(line);
+            return stringToUser(line, ",");
         }
     }
     if (fclose(fin))
@@ -87,7 +105,7 @@ int deleteUserFromFile(char *path, char *userId)
         strcpy(line, buf);
         char *ptr = strtok(buf, ",");
         if (strcmp(userId, ptr))
-            fprintf(fout, "%s\n", line);
+            fprintf(fout, "%s", line);
     }
     if (fclose(fin) || fclose(fout))
         erro("deleteUserFromFile", "fclose");
@@ -101,26 +119,27 @@ int deleteUserFromFile(char *path, char *userId)
 /**
  * Equivalent to a typical toString method.
 */
-char *userToString(User u)
+char *userToString(User *u)
 {
     char *buf = (char *)malloc(BUFSIZE);
-    sprintf(buf, "%s,%s,%s,%d,%d,%d\n", u.userId, u.ipAddr, u.password, u.permissions[0], u.permissions[1], u.permissions[2]);
+    sprintf(buf, "%s,%s,%s,%d,%d,%d\n", u->userId, u->ipAddr, u->password, u->permissions[0], u->permissions[1], u->permissions[2]);
     return buf;
 }
 
 /**
  *  Adds user data in the following format:
- * userId,ipAddr,password,permissions[0],permissions[1],permissions[2]
+ * userId,ipAddr,password,permissions[0],permissions[1],permissions[2].
+ * Returns 1 on success, and 0 otherwise.
  * 
-*/
-int addUserToFile(char *path, User u)
+ */
+int addUserToFile(char *path, User *u)
 {
     User *user;
     FILE *f = fopen(path, "a+");
     if (!f)
         erro("addUserToFile", "fopen");
 
-    if (!(user = searchUserOnFile(path, u.userId)))
+    if (!(user = searchUserOnFile(path, u->userId)))
     {
         char *userString = userToString(u);
         if (fprintf(f, "%s", userString) < 0)
@@ -130,7 +149,7 @@ int addUserToFile(char *path, User u)
             erro("addUserToFile", "fprintf");
         }
 
-        printf("User %s added to file %s!\n", u.userId, path);
+        printf("User %s added to file %s!\n", u->userId, path);
         if (fclose(f))
             erro("addUserToFile", "fclose");
         free(user);
@@ -139,7 +158,7 @@ int addUserToFile(char *path, User u)
     }
     else
     {
-        printf("User %s already exists!\n", u.userId);
+        printf("User %s already exists!\n", u->userId);
         if (fclose(f))
             erro("addUserToFile", "fclose");
         free(user);
@@ -151,25 +170,25 @@ int addUserToFile(char *path, User u)
  * Prints all users in DB.
  * 
 */
-void printUsers(char *path)
+char *printUsers(char *path)
 {
-    /*
-    Prints file contents line-by-line.
-    */
     char buffer[BUFSIZE];
+    char *userList = (char *)malloc(BUFSIZE * 8);
     FILE *f = fopen(path, "r");
     if (!f)
         erro("printUsers", "fopen");
     while (fgets(buffer, BUFSIZE, f))
-        printf("%s", buffer);
+        strcat(userList, buffer);
     if (fclose(f))
         erro("printUsers", "fclose");
+
+    return userList;
 }
 
 /**
  * Driver program to test above functions.
-*/
-/* int main()
+ * 
+int main()
 {
     User u = {
         "fabio",
@@ -190,8 +209,8 @@ void printUsers(char *path)
     char *userString = userToString(u);
     printf("%s\n", userString);
 
-    char userString2[BUFSIZE] = "fabio,193.136.129.1,fabio,1,1,1";
-    User us = *stringToUser(userString2);
+    char userString2[BUFSIZE] = "fabio 193.136.129.1 fabio 1 1 1";
+    User us = *stringToUser(userString2, " ");
     printf("userId: %s\n", us.userId);
     printf("ipAddr: %s\n", us.ipAddr);
     printf("password: %s\n", us.password);
@@ -211,4 +230,5 @@ void printUsers(char *path)
         printf("No user found!\n");
 
     return 0;
-} */
+}
+*/
