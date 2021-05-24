@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "*.html": "html",
+        "menus.h": "c"
+    }
+}

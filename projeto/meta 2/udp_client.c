@@ -8,14 +8,15 @@
 #include "fileIO.h"
 
 #define BUFLEN 512
-#define PORT 9876 // Porto para recepção das mensagens
-#define SERVER_IP "127.0.0.1"
+#define SERVER_PORT 100 // Porto para recepção das mensagens
+#define SERVER_IP "193.136.212.129"
 
 void sendMsg(int fd, char *msg, struct sockaddr_in addr, socklen_t slen);
 char *receiveMsg(int fd, struct sockaddr_in serverAddr);
 char *getMsgType(char *msg);
 char *getMsgContent(char *msg);
 char *makeMsg(char *type, char *content);
+User *login(int fd, struct sockaddr_in serverAddr, int slen);
 
 int main()
 {
@@ -31,14 +32,13 @@ int main()
 
     // Fill socket address struct
     serverAddr.sin_family = AF_INET;
-    serverAddr.sin_port = htons(PORT);
-    serverAddr.sin_addr.s_addr = htonl(INADDR_ANY);
-    //serverAddr.sin_addr.s_addr = inet_addr(SERVER_IP); // depois mudar para INADDR_ANY
+    serverAddr.sin_port = htons(SERVER_PORT);
+    serverAddr.sin_addr.s_addr = inet_addr(SERVER_IP);
 
     while (!quit)
     {
-    // LOGIN
-    Login:;
+        // LOGIN
+        loggedIn = 0;
         User *u = NULL;
         while (!loggedIn)
         {
@@ -46,23 +46,8 @@ int main()
             int mainMenuOpt = getOption();
             if (mainMenuOpt == 0) // Login
             {
-                // Send credentials
-                char *credentials = loginMenu();
-                sendMsg(fd, makeMsg("LOGIN", credentials), serverAddr, slen);
-                free(credentials);
-
-                // Reply contains user data
-                char *loginReply = receiveMsg(fd, serverAddr);
-                char *loginReplyContent = getMsgContent(strdup(loginReply));
-                if (!strcmp(getMsgType(strdup(loginReply)), "LOGIN"))
-                {
-                    printf("Login successful!\n");
-                    u = stringToUser(loginReplyContent, ",");
-                    printf("Welcome %s!\n", u->userId);
+                if ((u = login(fd, serverAddr, slen)) != NULL)
                     loggedIn = 1;
-                }
-                else
-                    printf("%s\n", loginReplyContent);
             }
             else if (mainMenuOpt == 1) // Quit
             {
@@ -70,114 +55,94 @@ int main()
                 break;
             }
         }
-
-    AuthorizedCommunications:;
-        authorizedCommsMenu(u);
-        int commMethod = getOption();
-        if (commMethod == 0) // Client-Server
+        if (loggedIn)
         {
-            printf("Destination [userId]: ");
-            char *destinationUserId = getTextField();
-            while (1)
+            int commMethod;
+            do
             {
-                printf("Message [-1 to exit]: ");
-                char *msg = getTextField();
-                if (!strcmp(msg, "-1"))
+                authorizedCommsMenu(u);
+                commMethod = getOption();
+                if (commMethod == 0) // Client-Server
                 {
-                    free(msg);
-                    free(destinationUserId);
-                    break;
-                }
-
-                // "[destination] msg"
-                char buf[512];
-                sprintf(buf, "[%s] %s", destinationUserId, msg);
-                sendMsg(fd, makeMsg("CS_CHAT", buf), serverAddr, slen); // send to server
-                free(destinationUserId);
-                free(msg);
-
-                char *reply = receiveMsg(fd, serverAddr);
-                char *replyContent = getMsgContent(strdup(reply));
-                printf("%s: %s\n", destinationUserId, replyContent);
-                free(reply);
-                free(replyContent);
-            }
-            goto AuthorizedCommunications;
-        }
-        else if (commMethod == 1) // P2P
-        {
-            // pede ao servidor o address e porto udp do destino (clientes ouvem tds no mm port#)
-            printf("Destination [userId]: ");
-            char *destinationUserId = getTextField();
-            sendMsg(fd, makeMsg("P2P_DESTREQ", destinationUserId), serverAddr, slen); // send to server
-
-            char *reply = receiveMsg(fd, serverAddr);
-            char *replyType = getMsgType(strdup(reply));
-            char *replyContent = getMsgContent(strdup(reply)); // peer ipAddr
-            if (!strcmp(replyType, "P2P_DESTREP"))
-            {
-                // to receive and send to peer
-                p2pAddr.sin_family = AF_INET;
-                p2pAddr.sin_port = htons(PORT);
-                p2pAddr.sin_addr.s_addr = inet_addr(replyContent);
-                while (1)
-                {
-                    printf("Message [-1 to exit]: ");
-                    char *msg = getTextField();
-                    if (!strcmp(msg, "-1"))
+                    printf("Chat with [userId]: ");
+                    char *destinationUserId = getTextField();
+                    while (1)
                     {
-                        free(msg);
-                        free(destinationUserId);
-                        break;
+                        printf("Send message [-1 to exit, 0 to receive message]: ");
+                        char *msg = getTextField();
+                        if (!strcmp(msg, "-1")) // Leave
+                        {
+                            free(msg);
+                            free(destinationUserId);
+                            break;
+                        }
+                        else // Chat
+                        {
+                            if (strcmp(msg, "0") != 0)
+                            {
+                                // Send first
+                                char buf[512];
+                                sprintf(buf, "( %s ) %s", destinationUserId, msg);
+                                buf[strlen(buf) + 1] = '\0';
+                                sendMsg(fd, makeMsg("CS_CHAT", buf), serverAddr, slen); // send to server
+                            }
+
+                            // Receive first
+                            char destBuf[128], msg[128];
+                            char *reply = receiveMsg(fd, serverAddr);
+                            char *replyContent = getMsgContent(strdup(reply));
+                            sscanf(replyContent, "( %s ) %[^\\0]", destBuf, msg);
+                            printf("%s: %s\n", destinationUserId, msg);
+                        }
                     }
-                    sendMsg(fd, msg, p2pAddr, slen); // send to server
-                    free(destinationUserId);
-                    free(msg);
-                    char *reply = receiveMsg(fd, p2pAddr);
-                    printf("%s: %s\n", destinationUserId, replyContent);
-                    free(reply);
-                    free(replyContent);
                 }
-                goto AuthorizedCommunications;
-            }
-        }
-        else if (commMethod == 2) // Multicast
-        {
-            // se opt == mc:
-            //   se eu quiser criar um grupo -> envia req de mc, reply é um mcaddr qualquer
-            //   se eu quiser receber msgs de um grupo -> inserir ip do grupo
-        }
-        else if (commMethod == 3)
-            goto Login;
-        else
-            goto AuthorizedCommunications;
+                else if (commMethod == 1) // P2P
+                {
+                    // pede ao servidor o address e porto udp do destino (clientes ouvem tds no mm port#)
+                    printf("Destination [userId]: ");
+                    char *destinationUserId = getTextField();
+                    sendMsg(fd, makeMsg("P2P_DESTREQ", destinationUserId), serverAddr, slen); // send to server
 
-        /* 
-        char *rcvMsg = receiveMsg(fd, serverAddr);
-        char *msgType = getMsgType(strdup(rcvMsg));
-        char *msgContent = getMsgContent(strdup(rcvMsg));
-        printf("Msg: %s--\nType: %s--\nContent: %s--\nSender: %s:%d--\n",
-               rcvMsg,
-               msgType,
-               msgContent,
-               inet_ntoa(serverAddr.sin_addr),
-               ntohs(serverAddr.sin_port));
+                    char *reply = receiveMsg(fd, serverAddr);
+                    char *replyType = getMsgType(strdup(reply));
+                    char *replyContent = getMsgContent(strdup(reply)); // peer ipAddr
+                    if (!strcmp(replyType, "P2P_DESTREP"))
+                    {
+                        // to receive and send to peer
+                        p2pAddr.sin_family = AF_INET;
+                        p2pAddr.sin_port = htons(SERVER_PORT);
+                        p2pAddr.sin_addr.s_addr = inet_addr(replyContent);
+                        while (1)
+                        {
+                            printf("Message [-1 to exit]: ");
+                            char *msg = getTextField();
+                            if (!strcmp(msg, "-1"))
+                            {
+                                free(msg);
+                                free(destinationUserId);
+                                break;
+                            }
+                            sendMsg(fd, msg, p2pAddr, slen); // send to peer
+                            free(destinationUserId);
+                            free(msg);
 
-        if (!strcmp(msgType, "C-S"))
-        {
-            ;
+                            char *reply = receiveMsg(fd, p2pAddr);
+                            printf("%s: %s\n", destinationUserId, replyContent);
+                            free(reply);
+                            free(replyContent);
+                        }
+                    }
+                }
+                else if (commMethod == 2) // Multicast
+                {
+                    // se opt == mc:
+                    //   se eu quiser criar um grupo -> envia req de mc, reply é um mcaddr qualquer
+                    //   se eu quiser receber msgs de um grupo -> inserir ip do grupo
+                }
+                else if (commMethod == 4) // Return to Login
+                    break;
+            } while (commMethod != 4);
         }
-        if (!strcmp(msgType, "P2P"))
-        {
-            ;
-        }
-        if (!strcmp(msgType, "MCAST"))
-        {
-            ;
-        }
-        else
-            sendMsg(fd, makeMsg("ERROR", "Reply not recognized!"), serverAddr);
-        */
     }
     printf("Client left.\n");
     close(fd);
@@ -187,6 +152,7 @@ int main()
 void sendMsg(int fd, char *msg, struct sockaddr_in addr, socklen_t slen)
 {
     int nread;
+    msg[strlen(msg)] = '\0';
     if ((nread = sendto(fd, msg, strlen(msg) + 1, 0, (struct sockaddr *)&addr, slen)) == -1)
         erro("[UDP_Client] sendMsg", "sendto");
 }
@@ -226,4 +192,28 @@ char *makeMsg(char *type, char *content)
     sprintf(msg, "%s %s", type, content);
     msg[strlen(msg)] = '\0';
     return msg;
+}
+
+User *login(int fd, struct sockaddr_in serverAddr, int slen)
+{
+    // Send credentials
+    User *u = NULL;
+    while (1)
+    {
+        char *credentials = loginMenu();
+        sendMsg(fd, makeMsg("LOGIN", credentials), serverAddr, slen);
+        free(credentials);
+
+        // Reply contains user data
+        char *loginReply = receiveMsg(fd, serverAddr);
+        char *loginReplyContent = getMsgContent(strdup(loginReply));
+        if (!strcmp(getMsgType(strdup(loginReply)), "LOGIN"))
+        {
+            u = stringToUser(loginReplyContent, ",");
+            printf("Login successful! Welcome %s!\n", u->userId);
+            return u;
+        }
+        else
+            printf("%s\n", loginReplyContent);
+    }
 }

@@ -122,7 +122,7 @@ int deleteUserFromFile(char *path, char *userId)
 char *userToString(User *u)
 {
     char *buf = (char *)malloc(BUFSIZE);
-    sprintf(buf, "%s,%s,%s,%d,%d,%d\n", u->userId, u->ipAddr, u->password, u->permissions[0], u->permissions[1], u->permissions[2]);
+    sprintf(buf, "%s,%s,%s,%d,%d,%d", u->userId, u->ipAddr, u->password, u->permissions[0], u->permissions[1], u->permissions[2]);
     return buf;
 }
 
