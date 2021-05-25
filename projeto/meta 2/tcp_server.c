@@ -1,7 +1,3 @@
-/*******************************************************************************
- * SERVIDOR no porto 9000, à escuta de novos clientes.  Quando surgem
- * novos clientes os dados por eles enviados são lidos e descarregados no ecran.
- *******************************************************************************/
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <wait.h>
@@ -17,8 +13,8 @@
 #include "fileIO.h"
 #include "structUser.h"
 
-#define SERVER_PORT 9000
-#define SERVER_IP "127.0.0.1"
+#define SERVER_PORT 80
+#define SERVER_IP "10.90.0.1"
 #define BUF_SIZE 1024
 #define DBPATH "userDB.txt"
 
@@ -48,9 +44,9 @@ int main()
     erro("main", "socket");
 
   // reutilizar sockets
-  int yes = 1;
-  if (setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(yes)) == -1)
-    erro("main", "setsockopt");
+  //int yes = 1;
+  //if (setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(yes)) == -1)
+  //  erro("main", "setsockopt");
 
   // bind socket to addr
   if (bind(fd, (struct sockaddr *)&addr, sizeof(addr)) < 0)
