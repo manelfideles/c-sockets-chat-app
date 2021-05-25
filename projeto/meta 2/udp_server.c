@@ -102,12 +102,16 @@ int main()
 			else
 				sendMsg(fd, makeMsg("#CS_CHAT", "User doesn't exist! Try again."), clientAddr, slen);
 		}
-		else if (!strcmp(msgType, "P2P_DESTREQ"))
+		else if (!strcmp(msgType, "P2P_CHAT"))
 		{
-			User *u = searchUserOnFile(DBPATH, msgContent); // msgContent -> userId
-			printf("Sending ipAddr of %s to address %s\n", u->userId, inet_ntoa(clientAddr->sin_addr));
-			sendMsg(fd, makeMsg("P2P_DESTREP", u->ipAddr), clientAddr, slen);
-			free(u);
+			// check if User 'u' exists and is alive
+			User *u = searchUserOnFile(DBPATH, msgContent);
+			if (u && clientInArray(clientAddr, allClients, clientCounter))
+			{
+				printf("Sending ipAddr of %s to address %s\n", u->userId, inet_ntoa(clientAddr->sin_addr));
+				sendMsg(fd, makeMsg("#P2P_CHAT", u->ipAddr), clientAddr, slen);
+				//free(u);
+			}
 		}
 		// else if (!strcmp(msgType, "")) {;}
 		// else {;}

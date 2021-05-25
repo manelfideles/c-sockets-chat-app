@@ -8,19 +8,25 @@
 #include "fileIO.h"
 
 #define BUFLEN 512
-#define SERVER_PORT 100 // Porto para recepção das mensagens
+#define PORT 100 // Porto para recepção das mensagens
 #define SERVER_IP "193.136.212.129"
+#define MY_IP "193.136.212.194" // change according to docker's ipAddr
 
 void sendMsg(int fd, char *msg, struct sockaddr_in addr, socklen_t slen);
+void sendToPeer(int fd, char *msg, struct sockaddr_in *addr, socklen_t slen);
 char *receiveMsg(int fd, struct sockaddr_in serverAddr);
+char *rcvFromPeer(int fd, struct sockaddr_in *addr, socklen_t slen);
 char *getMsgType(char *msg);
 char *getMsgContent(char *msg);
 char *makeMsg(char *type, char *content);
 User *login(int fd, struct sockaddr_in serverAddr, int slen);
+char *requestPeerIp(int fd, char *destinationUserId, struct sockaddr_in serverAddr, int slen);
 
 int main()
 {
-    struct sockaddr_in serverAddr, p2pAddr;
+    struct sockaddr_in serverAddr;
+    struct sockaddr_in *peerAddr = (struct sockaddr_in *)malloc(sizeof(struct sockaddr_in));
+    struct sockaddr_in myAddr; // p2p
     int fd, slen = sizeof(serverAddr);
 
     // Flow-control flags
@@ -32,8 +38,16 @@ int main()
 
     // Fill socket address struct
     serverAddr.sin_family = AF_INET;
-    serverAddr.sin_port = htons(SERVER_PORT);
+    serverAddr.sin_port = htons(PORT);
     serverAddr.sin_addr.s_addr = inet_addr(SERVER_IP);
+
+    // Fill and bind myAddr to socket
+    myAddr.sin_family = AF_INET;
+    myAddr.sin_port = htons(PORT);
+    myAddr.sin_addr.s_addr = inet_addr(MY_IP);
+
+    if (bind(fd, (struct sockaddr *)&myAddr, sizeof(myAddr)) == -1)
+        erro("p2p", "bind");
 
     while (!quit)
     {
@@ -98,38 +112,44 @@ int main()
                 }
                 else if (commMethod == 1) // P2P
                 {
-                    // pede ao servidor o address e porto udp do destino (clientes ouvem tds no mm port#)
-                    printf("Destination [userId]: ");
+                    printf("Chat with [userId]: ");
                     char *destinationUserId = getTextField();
-                    sendMsg(fd, makeMsg("P2P_DESTREQ", destinationUserId), serverAddr, slen); // send to server
 
-                    char *reply = receiveMsg(fd, serverAddr);
-                    char *replyType = getMsgType(strdup(reply));
-                    char *replyContent = getMsgContent(strdup(reply)); // peer ipAddr
-                    if (!strcmp(replyType, "P2P_DESTREP"))
+                    // Fill peerAddr
+                    peerAddr->sin_family = AF_INET;
+                    peerAddr->sin_port = htons(PORT);
+                    peerAddr->sin_addr.s_addr = inet_addr(requestPeerIp(fd, destinationUserId, serverAddr, slen));
+
+                    printf("myAddr: %s:%d\n", inet_ntoa(myAddr.sin_addr),
+                           ntohs(myAddr.sin_port));
+
+                    while (1)
                     {
-                        // to receive and send to peer
-                        p2pAddr.sin_family = AF_INET;
-                        p2pAddr.sin_port = htons(SERVER_PORT);
-                        p2pAddr.sin_addr.s_addr = inet_addr(replyContent);
-                        while (1)
+                        printf("Send message [-1 to exit, 0 to receive message]: ");
+                        char *msg = getTextField();
+                        if (!strcmp(msg, "-1")) // Leave
                         {
-                            printf("Message [-1 to exit]: ");
-                            char *msg = getTextField();
-                            if (!strcmp(msg, "-1"))
-                            {
-                                free(msg);
-                                free(destinationUserId);
-                                break;
-                            }
-                            sendMsg(fd, msg, p2pAddr, slen); // send to peer
-                            free(destinationUserId);
                             free(msg);
+                            free(destinationUserId);
+                            break;
+                        }
+                        else // Chat
+                        {
+                            if (strcmp(msg, "0") != 0)
+                            {
+                                // Send first
+                                char buf[512];
+                                sprintf(buf, "( %s ) %s", destinationUserId, msg);
+                                buf[strlen(buf) + 1] = '\0';
+                                sendToPeer(fd, makeMsg("P2P_CHAT", buf), peerAddr, slen); // send to server
+                            }
 
-                            char *reply = receiveMsg(fd, p2pAddr);
-                            printf("%s: %s\n", destinationUserId, replyContent);
-                            free(reply);
-                            free(replyContent);
+                            // Receive first
+                            char destBuf[128], msg[128];
+                            char *reply = rcvFromPeer(fd, peerAddr, slen);
+                            char *replyContent = getMsgContent(strdup(reply));
+                            sscanf(replyContent, "( %s ) %[^\\0]", destBuf, msg);
+                            printf("%s: %s\n", destinationUserId, msg);
                         }
                     }
                 }
@@ -157,15 +177,36 @@ void sendMsg(int fd, char *msg, struct sockaddr_in addr, socklen_t slen)
         erro("[UDP_Client] sendMsg", "sendto");
 }
 
-char *receiveMsg(int fd, struct sockaddr_in serverAddr)
+char *receiveMsg(int fd, struct sockaddr_in addr)
 {
+
     char *buffer = (char *)malloc(BUFLEN);
     int nread;
-    socklen_t slen = sizeof(serverAddr);
-    if ((nread = recvfrom(fd, buffer, BUFLEN, 0, (struct sockaddr *)&serverAddr, (socklen_t *)&slen)) == -1)
+    socklen_t slen = sizeof(addr);
+    if ((nread = recvfrom(fd, buffer, BUFLEN, 0, (struct sockaddr *)&addr, (socklen_t *)&slen)) == -1)
         erro("[UDP_Client] receiveMsg", "recvfrom");
     buffer[nread] = '\0';
     //printf("Received: %s--\n", buffer);
+    fflush(stdout);
+    return buffer;
+}
+
+void sendToPeer(int fd, char *msg, struct sockaddr_in *addr, socklen_t slen)
+{
+    int nread;
+    msg[strlen(msg)] = '\0';
+    if ((nread = sendto(fd, msg, BUFLEN, 0, (struct sockaddr *)addr, slen)) == -1)
+        erro("[UDP_Server] sendMsg", "sendto");
+}
+
+char *rcvFromPeer(int fd, struct sockaddr_in *addr, socklen_t slen)
+{
+    char *buffer = (char *)malloc(BUFLEN);
+    ssize_t nread;
+    if ((nread = recvfrom(fd, buffer, BUFLEN, 0, (struct sockaddr *)addr, (socklen_t *)&slen)) == -1)
+        erro("[UDP_Client] receiveMsg", "recvfrom");
+    buffer[nread] = '\0';
+
     fflush(stdout);
     return buffer;
 }
@@ -216,4 +257,18 @@ User *login(int fd, struct sockaddr_in serverAddr, int slen)
         else
             printf("%s\n", loginReplyContent);
     }
+}
+
+char *requestPeerIp(int fd, char *destinationUserId, struct sockaddr_in serverAddr, int slen)
+{
+    // send to server
+    sendMsg(fd, makeMsg("P2P_CHAT", destinationUserId), serverAddr, slen);
+    char *reply = receiveMsg(fd, serverAddr);
+    char *replyType = getMsgType(strdup(reply));
+
+    // peer ipAddr
+    char *peerIpAddr = NULL;
+    if (!strcmp(replyType, "#P2P_CHAT"))
+        peerIpAddr = getMsgContent(strdup(reply));
+    return peerIpAddr;
 }
